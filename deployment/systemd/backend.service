@@ -1,0 +1,24 @@
+# /etc/systemd/system/backend.service
+[Unit]
+Description=HostLab Express API
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=hostlab
+Group=hostlab
+WorkingDirectory=/opt/hostlab/backend
+EnvironmentFile=/opt/hostlab/backend/.env
+# Adjust if node is elsewhere: `which node` (nvm installs are NOT visible to systemd; use the system Node).
+ExecStart=/usr/bin/node dist/server.js
+Restart=on-failure
+RestartSec=5
+# Hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

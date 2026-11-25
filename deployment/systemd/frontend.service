@@ -1,0 +1,23 @@
+# /etc/systemd/system/frontend.service
+[Unit]
+Description=HostLab Next.js frontend
+After=network.target backend.service
+
+[Service]
+Type=simple
+User=hostlab
+Group=hostlab
+WorkingDirectory=/opt/hostlab/frontend
+Environment=NODE_ENV=production
+Environment=PORT=3000
+# `next start` is configured in package.json to bind 127.0.0.1:3000.
+ExecStart=/usr/bin/npm run start
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
